@@ -1,5 +1,4 @@
 <html>
-<html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Epic Quest: The Game</title>
@@ -12,32 +11,29 @@
     <h3>The Game</h3>
 </div>
 <div class="welcomePage">
+    <p>Добро пожаловать в эпический квест! Как зовут тебя, Герой?</p>
+    <input type="text" id="nameInput">
+</div>
+<br>
+<div class="welcomePage">
     <button onclick="start()">Start adventure</button>
     <button onclick="statLoad()">Stats</button>
 </div>
 
 <script>
     function start() {
+        let data = $("#nameInput").val();
         $.ajax({
             url: '/start',
-            type: 'POST',
+            type: 'GET',
+            dataType: 'text',
+            data: data,
             contentType: 'application/json;charset=UTF-8',
-            async: false,
-            success: function () {
-                location.reload();
-            }
+            async: false
         });
     }
     function statLoad() {
-        /*$.ajax({
-            url: '/stat',
-            type: 'POST',
-            contentType: 'application/json;charset=UTF-8',
-            async: false,
-            success: function () {
-                location.reload();
-            }
-        });*/
+
     }
 </script>
 </body>
