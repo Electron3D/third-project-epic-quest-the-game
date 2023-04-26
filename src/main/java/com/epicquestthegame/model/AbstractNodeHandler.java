@@ -1,12 +1,12 @@
 package com.epicquestthegame.model;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 public abstract class AbstractNodeHandler implements NodeHandler{
     protected NodeHandler nextNode;
     protected NodeHandler defeatNode;
     protected Node thisNode;
-    private String eventDescription;
-    private String positiveDecision;
-    private String negativeDecision;
 
     public AbstractNodeHandler(NodeHandler defeatNode, Node thisNode) {
         this.defeatNode = defeatNode;
@@ -15,27 +15,28 @@ public abstract class AbstractNodeHandler implements NodeHandler{
     public void init(NodeHandler nextNode) {
         if (this.nextNode == null) {
             this.nextNode = nextNode;
-            initStrings();
             return;
         }
         throw new IllegalStateException("Init method should be called only once!");
     }
 
     @Override
-    public void handle(Node node, boolean decision) {
+    public void handle(Node node, HttpServletRequest request) {
+        boolean decision = (boolean) request.getAttribute("decision");
+        HttpSession currentSession = request.getSession();
         if (node == thisNode) {
-            handleDecision(decision);
+            handleDecision(decision, request, currentSession);
         } else {
-            nextNode.handle(node, decision);
+            nextNode.handle(node, request);
         }
     }
 
-    private void handleDecision(Boolean decision) {
+    private void handleDecision(Boolean decision, HttpServletRequest request, HttpSession currentSession) {
         if (decision) {
-            handleEvent(decision);
+            handleEvent(currentSession);
         } else {
-            defeatNode.handle(thisNode, decision);
+            defeatNode.handle(thisNode, request);
         }
     }
-    protected abstract void handleEvent(Boolean decision);
+    protected abstract void handleEvent(HttpSession currentSession);
 }

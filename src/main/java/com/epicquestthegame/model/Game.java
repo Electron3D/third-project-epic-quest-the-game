@@ -2,10 +2,16 @@ package com.epicquestthegame.model;
 
 import com.epicquestthegame.model.nodes.*;
 
-import java.util.ArrayList;
-
 public class Game {
-    public static void createGame() {
+    private NodeHandler startedNode;
+    private String gamerName;
+
+    public Game(String gamerName) {
+        this.gamerName = gamerName;
+    }
+
+    public void createGame() {
+        NodeHandler victoryNodeHandler = new VictoryNodeHandler();
         NodeHandler defeatNodeHandler = new DefeatNodeHandler();
 
         AbstractNodeHandler prisonNodeHandler = new PrisonNodeHandler(defeatNodeHandler);
@@ -17,5 +23,15 @@ public class Game {
         makeAGangNodeHandler.init(succubusNodeHandler);
         succubusNodeHandler.init(killTheKingNodeHandler);
         killTheKingNodeHandler.init(defeatNodeHandler);
+
+        startedNode = prisonNodeHandler;
+    }
+
+    public NodeHandler getStartedNode() {
+        return startedNode;
+    }
+
+    public String getGamerName() {
+        return gamerName;
     }
 }

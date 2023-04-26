@@ -6,6 +6,11 @@
     <script src=https://code.jquery.com/jquery-3.6.0.min.js></script>
 </head>
 <body>
+<script>let eventDescription = ${game.getStartedNode().}</script>
 <h1>Test</h1>
+<div>${game.getGamerName()}</div>
+<div></div>
+<div>${game.getGamerName()}</div>
+<div>${game.getGamerName()}</div>
 </body>
 </html>

@@ -12,7 +12,7 @@
 </div>
 <div class="welcomePage">
     <p>Добро пожаловать в эпический квест! Как зовут тебя, Герой?</p>
-    <input type="text" id="nameInput">
+    <input type="text" id="name">
 </div>
 <br>
 <div class="welcomePage">
@@ -22,7 +22,7 @@
 
 <script>
     function start() {
-        let data = $("#nameInput").val();
+        let data = "gamerName=" + $("#name").val();
         $.ajax({
             url: '/start',
             type: 'GET',
@@ -33,7 +33,12 @@
         });
     }
     function statLoad() {
-
+        $.ajax({
+            url: '/stat',
+            type: 'GET',
+            contentType: 'application/json;charset=UTF-8',
+            async: false
+        });
     }
 </script>
 </body>
