@@ -6,39 +6,28 @@
     <script src=https://code.jquery.com/jquery-3.6.0.min.js></script>
 </head>
 <body>
-<div class="welcomePage">
+<div class="textInCenter">
     <h1>Epic Quest</h1>
     <h3>The Game</h3>
 </div>
-<div class="welcomePage">
+<div class="textInCenter">
     <p>Добро пожаловать в эпический квест! Как зовут тебя, Герой?</p>
     <input type="text" id="name">
 </div>
 <br>
-<div class="welcomePage">
+<div class="textInCenter">
     <button onclick="start()">Start adventure</button>
     <button onclick="statLoad()">Stats</button>
 </div>
 
 <script>
     function start() {
-        let data = "gamerName=" + $("#name").val();
-        $.ajax({
-            url: '/start',
-            type: 'GET',
-            dataType: 'text',
-            data: data,
-            contentType: 'application/json;charset=UTF-8',
-            async: false
-        });
+        let gamerName = "gamerName=" + $("#name").val();
+        let decision = "decision=" + true;
+        window.location='/start?' + gamerName + '&' + decision;
     }
     function statLoad() {
-        $.ajax({
-            url: '/stat',
-            type: 'GET',
-            contentType: 'application/json;charset=UTF-8',
-            async: false
-        });
+
     }
 </script>
 </body>

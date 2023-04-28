@@ -12,6 +12,10 @@ public abstract class AbstractNodeHandler implements NodeHandler{
         this.defeatNode = defeatNode;
         this.thisNode = thisNode;
     }
+
+    public Node getThisNode() {
+        return thisNode;
+    }
     public void init(NodeHandler nextNode) {
         if (this.nextNode == null) {
             this.nextNode = nextNode;
@@ -22,21 +26,25 @@ public abstract class AbstractNodeHandler implements NodeHandler{
 
     @Override
     public void handle(Node node, HttpServletRequest request) {
-        boolean decision = (boolean) request.getAttribute("decision");
         HttpSession currentSession = request.getSession();
         if (node == thisNode) {
-            handleDecision(decision, request, currentSession);
+            handleDecision(request, currentSession);
         } else {
             nextNode.handle(node, request);
         }
     }
 
-    private void handleDecision(Boolean decision, HttpServletRequest request, HttpSession currentSession) {
+    private void handleDecision(HttpServletRequest request, HttpSession currentSession) {
+        String decisionString = request.getParameter("decision");
+        boolean decision = "true".equals(decisionString);
         if (decision) {
             handleEvent(currentSession);
         } else {
             defeatNode.handle(thisNode, request);
         }
     }
-    protected abstract void handleEvent(HttpSession currentSession);
+    protected void handleEvent(HttpSession currentSession) {
+        AbstractNodeHandler nextNodeHandler = (AbstractNodeHandler) nextNode;
+        currentSession.setAttribute("nextNode", nextNodeHandler.getThisNode());
+    }
 }

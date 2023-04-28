@@ -3,14 +3,11 @@ package com.epicquestthegame.model;
 import com.epicquestthegame.model.nodes.*;
 
 public class Game {
-    private NodeHandler startedNode;
+    private AbstractNodeHandler startedNode;
     private String gamerName;
 
     public Game(String gamerName) {
         this.gamerName = gamerName;
-    }
-
-    public void createGame() {
         NodeHandler victoryNodeHandler = new VictoryNodeHandler();
         NodeHandler defeatNodeHandler = new DefeatNodeHandler();
 
@@ -22,12 +19,12 @@ public class Game {
         prisonNodeHandler.init(makeAGangNodeHandler);
         makeAGangNodeHandler.init(succubusNodeHandler);
         succubusNodeHandler.init(killTheKingNodeHandler);
-        killTheKingNodeHandler.init(defeatNodeHandler);
+        killTheKingNodeHandler.init(victoryNodeHandler);
 
         startedNode = prisonNodeHandler;
     }
 
-    public NodeHandler getStartedNode() {
+    public AbstractNodeHandler getStartedNode() {
         return startedNode;
     }
 
