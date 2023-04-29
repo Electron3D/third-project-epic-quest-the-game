@@ -17,7 +17,11 @@ public class LogicServlet extends HttpServlet {
         HttpSession currentSession = req.getSession();
         Game game = (Game) currentSession.getAttribute("game");
         Node nextNode = (Node) currentSession.getAttribute("nextNode");
-        game.getStartedNode().handle(nextNode, req);
+        String gameEndString = req.getParameter("gameEnd");
+        boolean gameEnd = "true".equals(gameEndString);
+        if (!gameEnd) {
+            game.getStartedNode().handle(nextNode, req);
+        }
         resp.sendRedirect("/game.jsp");
     }
 }

@@ -1,5 +1,7 @@
 package com.epicquestthegame.model;
 
+import com.epicquestthegame.model.endNodes.VictoryNodeHandler;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -13,15 +15,14 @@ public abstract class AbstractNodeHandler implements NodeHandler{
         this.thisNode = thisNode;
     }
 
+    @Override
     public Node getThisNode() {
         return thisNode;
     }
-    public void init(NodeHandler nextNode) {
-        if (this.nextNode == null) {
-            this.nextNode = nextNode;
-            return;
-        }
-        throw new IllegalStateException("Init method should be called only once!");
+
+    @Override
+    public void setNext(NodeHandler nextNode) {
+        this.nextNode = nextNode;
     }
 
     @Override
@@ -40,11 +41,18 @@ public abstract class AbstractNodeHandler implements NodeHandler{
         if (decision) {
             handleEvent(currentSession);
         } else {
+            currentSession.setAttribute("gameEnd", true);
             defeatNode.handle(thisNode, request);
         }
     }
     protected void handleEvent(HttpSession currentSession) {
-        AbstractNodeHandler nextNodeHandler = (AbstractNodeHandler) nextNode;
+        NodeHandler nextNodeHandler;
+        if (nextNode instanceof VictoryNodeHandler) {
+            nextNodeHandler = this;
+            currentSession.setAttribute("gameEnd", true);
+        } else {
+            nextNodeHandler =  nextNode;
+        }
         currentSession.setAttribute("nextNode", nextNodeHandler.getThisNode());
     }
 }

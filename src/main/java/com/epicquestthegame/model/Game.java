@@ -1,9 +1,11 @@
 package com.epicquestthegame.model;
 
+import com.epicquestthegame.model.endNodes.DefeatNodeHandler;
+import com.epicquestthegame.model.endNodes.VictoryNodeHandler;
 import com.epicquestthegame.model.nodes.*;
 
 public class Game {
-    private AbstractNodeHandler startedNode;
+    private NodeHandler startedNode;
     private String gamerName;
 
     public Game(String gamerName) {
@@ -11,20 +13,20 @@ public class Game {
         NodeHandler victoryNodeHandler = new VictoryNodeHandler();
         NodeHandler defeatNodeHandler = new DefeatNodeHandler();
 
-        AbstractNodeHandler prisonNodeHandler = new PrisonNodeHandler(defeatNodeHandler);
-        AbstractNodeHandler makeAGangNodeHandler = new MakeAGangNodeHandler(defeatNodeHandler);
-        AbstractNodeHandler succubusNodeHandler = new SuccubusNodeHandler(defeatNodeHandler);
-        AbstractNodeHandler killTheKingNodeHandler = new KillTheKingNodeHandler(defeatNodeHandler);
+        NodeHandler prisonNodeHandler = new PrisonNodeHandler(defeatNodeHandler);
+        NodeHandler makeAGangNodeHandler = new MakeAGangNodeHandler(defeatNodeHandler);
+        NodeHandler succubusNodeHandler = new SuccubusNodeHandler(defeatNodeHandler);
+        NodeHandler killTheKingNodeHandler = new KillTheKingNodeHandler(defeatNodeHandler);
 
-        prisonNodeHandler.init(makeAGangNodeHandler);
-        makeAGangNodeHandler.init(succubusNodeHandler);
-        succubusNodeHandler.init(killTheKingNodeHandler);
-        killTheKingNodeHandler.init(victoryNodeHandler);
+        prisonNodeHandler.setNext(makeAGangNodeHandler);
+        makeAGangNodeHandler.setNext(succubusNodeHandler);
+        succubusNodeHandler.setNext(killTheKingNodeHandler);
+        killTheKingNodeHandler.setNext(victoryNodeHandler);
 
         startedNode = prisonNodeHandler;
     }
 
-    public AbstractNodeHandler getStartedNode() {
+    public NodeHandler getStartedNode() {
         return startedNode;
     }
 

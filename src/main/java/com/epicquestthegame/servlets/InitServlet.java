@@ -3,7 +3,6 @@ package com.epicquestthegame.servlets;
 import com.epicquestthegame.model.Game;
 import com.epicquestthegame.model.Node;
 
-import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -14,13 +13,15 @@ import java.io.IOException;
 @WebServlet(name = "InitServlet", value = "/start")
 public class InitServlet extends HttpServlet {
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         HttpSession currentSession = req.getSession(true);
         String name = req.getParameter("gamerName");
+        currentSession.setAttribute("gamerName", name);
         Game game = new Game(name);
         Node firstNode = game.getStartedNode().getThisNode();
         currentSession.setAttribute("game", game);
         currentSession.setAttribute("nextNode", firstNode);
-        getServletContext().getRequestDispatcher("/logic").forward(req, resp);
+        currentSession.setAttribute("gameEnd", false);
+        resp.sendRedirect("/game.jsp");
     }
 }
