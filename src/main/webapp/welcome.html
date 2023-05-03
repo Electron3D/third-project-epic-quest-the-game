@@ -13,7 +13,7 @@
     </div>
     <div>
         <p>Добро пожаловать в эпический квест! Как зовут тебя, Герой?</p>
-        <input type="text" id="name">
+        <input type="text" id="name" maxlength="16">
     </div>
     <br>
     <div>
@@ -23,8 +23,13 @@
 
 <script>
     function start() {
-        let gamerName = "gamerName=" + $("#name").val();
-        window.location='/init?' + gamerName;
+        let gamerName = $("#name").val().trim();
+        if (!gamerName) {
+            alert("Ну ладно, шутник, назовись как подобает!");
+        } else {
+            let gamerNameParam = "gamerName=" + gamerName;
+            window.location='/init?' + gamerNameParam;
+        }
     }
 </script>
 </body>
