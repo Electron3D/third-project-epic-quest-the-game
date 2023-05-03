@@ -7,6 +7,23 @@ h1 {
 h3 {
     color: darkred;
 }
-.textInCenter {
+.centered {
+    text-align: center;
+    margin: 0;
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    margin-right: -50%;
+    transform: translate(-50%, -50%)
+}
+.fixedWidth {
+    width: 40em;
+}
+.stats {
+    position: fixed;
+    bottom: 10px;
+    left: 10px;
+}
+.statTable {
     text-align: center;
 }

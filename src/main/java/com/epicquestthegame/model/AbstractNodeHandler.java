@@ -1,12 +1,10 @@
 package com.epicquestthegame.model;
 
-import com.epicquestthegame.model.endNodes.VictoryNodeHandler;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 public abstract class AbstractNodeHandler implements NodeHandler{
-    protected NodeHandler nextNode;
+    protected NodeHandler nextNodeHandler;
     protected NodeHandler defeatNode;
     protected Node thisNode;
 
@@ -21,8 +19,8 @@ public abstract class AbstractNodeHandler implements NodeHandler{
     }
 
     @Override
-    public void setNext(NodeHandler nextNode) {
-        this.nextNode = nextNode;
+    public void setNext(NodeHandler nextNodeHandler) {
+        this.nextNodeHandler = nextNodeHandler;
     }
 
     @Override
@@ -31,7 +29,7 @@ public abstract class AbstractNodeHandler implements NodeHandler{
         if (node == thisNode) {
             handleDecision(request, currentSession);
         } else {
-            nextNode.handle(node, request);
+            nextNodeHandler.handle(node, request);
         }
     }
 
@@ -39,20 +37,23 @@ public abstract class AbstractNodeHandler implements NodeHandler{
         String decisionString = request.getParameter("decision");
         boolean decision = "true".equals(decisionString);
         if (decision) {
-            handleEvent(currentSession);
+            handleEvent(request, currentSession);
         } else {
             currentSession.setAttribute("gameEnd", true);
+            int defeatedTimes = (int) currentSession.getAttribute("defeatedTimes");
+            currentSession.setAttribute("defeatedTimes", defeatedTimes + 1);
             defeatNode.handle(thisNode, request);
         }
     }
-    protected void handleEvent(HttpSession currentSession) {
-        NodeHandler nextNodeHandler;
-        if (nextNode instanceof VictoryNodeHandler) {
-            nextNodeHandler = this;
-            currentSession.setAttribute("gameEnd", true);
+    protected void handleEvent(HttpServletRequest request, HttpSession currentSession) {
+        Node nextNode = nextNodeHandler.getThisNode();
+        if (nextNode != null) {
+            currentSession.setAttribute("nextNode", nextNode);
         } else {
-            nextNodeHandler =  nextNode;
+            int victoryTimes = (int) currentSession.getAttribute("victoryTimes");
+            currentSession.setAttribute("victoryTimes", victoryTimes + 1);
+            currentSession.setAttribute("gameEnd", true);
+            nextNodeHandler.handle(thisNode, request);
         }
-        currentSession.setAttribute("nextNode", nextNodeHandler.getThisNode());
     }
 }

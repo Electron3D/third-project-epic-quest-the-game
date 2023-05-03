@@ -8,24 +8,46 @@
     <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 </head>
 <body>
-<h1 class="textInCenter">Test</h1>
-<div class="textInCenter">${game.getGamerName()}</div>
-<div class="textInCenter" id="eventDescriptor">${nextNode.getEventDescription()}</div>
-<div class="textInCenter" id="decisionButtons">
-    <button onclick="start(true)">${nextNode.getPositiveDecision()}</button>
-    <button onclick="start(false)">${nextNode.getNegativeDecision()}</button>
-</div>
-<c:if test="${gameEnd == true}">
-    <script>
-        $("#eventDescriptor").hide();
-        $("#decisionButtons").hide();
-    </script>
-    <h1 class="textInCenter">${resultText.toString()}</h1>
-    <div class="textInCenter">
-        <button value="restart" onclick="restart(value)">Start again</button>
-        <button value="mainMenu" onclick="restart(value)">Main menu</button>
+<div class="centered">
+    <div class="fixedWidth" id="eventName"><h1>${nextNode.getName()}</h1></div>
+    <div class="fixedWidth" id="eventDescriptor">${nextNode.getEventDescription()}</div>
+    <br>
+    <div id="decisionButtons">
+        <button onclick="start(true)">${nextNode.getPositiveDecision()}</button>
+        <button onclick="start(false)">${nextNode.getNegativeDecision()}</button>
     </div>
-</c:if>
+    <c:if test="${gameEnd == true}">
+        <script>
+            $("#eventName").hide();
+            $("#eventDescriptor").hide();
+            $("#decisionButtons").hide();
+        </script>
+        <div class="fixedWidth">
+            <h1>${resultText.toString()}</h1>
+        </div>
+        <div>
+            <button value="restart" onclick="restart(value)">Start again</button>
+            <button value="mainMenu" onclick="restart(value)">Main menu</button>
+        </div>
+    </c:if>
+</div>
+
+<div class="stats">
+    <table class="statTable">
+        <tr id="header">
+            <td>Имя</td>
+            <td>Побед</td>
+            <td>Проигрышей</td>
+        </tr>
+        <tr>
+            <td>${game.getGamerName()}</td>
+            <td>${victoryTimes.toString()}</td>
+            <td>${defeatedTimes.toString()}</td>
+        </tr>
+    </table>
+    <hr>
+    <p>IP адресс игрока: ${ip.toString()}</p>
+</div>
 
 <script>
     function start(decision) {
@@ -34,25 +56,10 @@
     }
     function restart(value) {
         if ("restart" === value) {
-            $.ajax({
-                url: '/restart',
-                type: 'POST',
-                contentType: 'application/json;charset=UTF-8',
-                async: false,
-                success: function () {
-                    window.location='/start';
-                }
-            });
+            let gamerName = "${game.getGamerName()}";
+            window.location='/start?gamerName=' + gamerName;
         } else {
-            $.ajax({
-                url: '/restart',
-                type: 'POST',
-                contentType: 'application/json;charset=UTF-8',
-                async: false,
-                success: function () {
-                    window.location='/welcome.html';
-                }
-            });
+            window.location='/welcome.html';
         }
     }
 </script>

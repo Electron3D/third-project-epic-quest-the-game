@@ -10,14 +10,19 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
-@WebServlet(name = "LogicServlet", value = "/logic")
-public class LogicServlet extends HttpServlet {
+@WebServlet(name = "StartServlet", value = "/start")
+public class StartServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         HttpSession currentSession = req.getSession();
-        Game game = (Game) currentSession.getAttribute("game");
-        Node nextNode = (Node) currentSession.getAttribute("nextNode");
-        game.getStartedNode().handle(nextNode, req);
+        String name = (String) currentSession.getAttribute("gamerName");
+        Game game = new Game(name);
+        Node firstNode = game.getStartedNode().getThisNode();
+        currentSession.setAttribute("game", game);
+        currentSession.setAttribute("currentNode", firstNode);
+        currentSession.setAttribute("nextNode", firstNode);
+
+        currentSession.setAttribute("gameEnd", false);
         resp.sendRedirect("/game.jsp");
     }
 }
