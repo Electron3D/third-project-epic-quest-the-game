@@ -40,7 +40,7 @@
             <td>Проигрышей</td>
         </tr>
         <tr>
-            <td>${gamerName.toString()}</td>
+            <td>${game.getGamerName()}</td>
             <td>${victoryTimes.toString()}</td>
             <td>${defeatedTimes.toString()}</td>
         </tr>
@@ -56,7 +56,7 @@
     }
     function restart(value) {
         if ("restart" === value) {
-            let gamerName = "${gamerName.toString()}";
+            let gamerName = "${game.getGamerName()}";
             window.location='/start?gamerName=' + gamerName;
         } else {
             window.location='/welcome.html';

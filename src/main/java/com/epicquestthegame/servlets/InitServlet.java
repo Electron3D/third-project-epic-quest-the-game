@@ -13,8 +13,6 @@ public class InitServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         HttpSession currentSession = req.getSession(true);
-        String name = req.getParameter("gamerName");
-        currentSession.setAttribute("gamerName", name);
         currentSession.setAttribute("victoryTimes", 0);
         currentSession.setAttribute("defeatedTimes", 0);
         String ip = req.getRemoteAddr();

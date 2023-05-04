@@ -1,5 +1,6 @@
 package com.epicquestthegame.servlets;
 
+import com.epicquestthegame.model.Game;
 import com.epicquestthegame.model.Node;
 import com.epicquestthegame.model.NodeHandler;
 import com.epicquestthegame.model.endNodes.DefeatNodeHandler;
@@ -22,10 +23,13 @@ public class StartServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         HttpSession currentSession = req.getSession();
 
+        String gamerName = req.getParameter("gamerName");
         NodeHandler firstNodeHandler = initChainOfNodes();
         Node firstNode = firstNodeHandler.getThisNode();
 
-        currentSession.setAttribute("firstNodeHandler", firstNodeHandler);
+        Game game = new Game(firstNodeHandler, gamerName);
+
+        currentSession.setAttribute("game", game);
         currentSession.setAttribute("currentNode", firstNode);
         currentSession.setAttribute("nextNode", firstNode);
         currentSession.setAttribute("gameEnd", false);
