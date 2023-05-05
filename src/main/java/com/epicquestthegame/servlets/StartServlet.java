@@ -2,13 +2,10 @@ package com.epicquestthegame.servlets;
 
 import com.epicquestthegame.model.Game;
 import com.epicquestthegame.model.Node;
+import com.epicquestthegame.model.Handler;
 import com.epicquestthegame.model.NodeHandler;
 import com.epicquestthegame.model.endNodes.DefeatNodeHandler;
 import com.epicquestthegame.model.endNodes.VictoryNodeHandler;
-import com.epicquestthegame.model.nodes.KillTheKingNodeHandler;
-import com.epicquestthegame.model.nodes.MakeAGangNodeHandler;
-import com.epicquestthegame.model.nodes.PrisonNodeHandler;
-import com.epicquestthegame.model.nodes.SuccubusNodeHandler;
 
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -24,7 +21,7 @@ public class StartServlet extends HttpServlet {
         HttpSession currentSession = req.getSession();
 
         String gamerName = req.getParameter("gamerName");
-        NodeHandler firstNodeHandler = initChainOfNodes();
+        Handler firstNodeHandler = initChainOfNodes();
         Node firstNode = firstNodeHandler.getThisNode();
 
         Game game = new Game(firstNodeHandler, gamerName);
@@ -37,14 +34,14 @@ public class StartServlet extends HttpServlet {
         resp.sendRedirect("/game.jsp");
     }
 
-    private NodeHandler initChainOfNodes() {
-        NodeHandler victoryNodeHandler = new VictoryNodeHandler();
-        NodeHandler defeatNodeHandler = new DefeatNodeHandler();
+    private Handler initChainOfNodes() {
+        Handler victoryNodeHandler = new VictoryNodeHandler();
+        Handler defeatNodeHandler = new DefeatNodeHandler();
 
-        NodeHandler prisonNodeHandler = new PrisonNodeHandler(defeatNodeHandler);
-        NodeHandler makeAGangNodeHandler = new MakeAGangNodeHandler(defeatNodeHandler);
-        NodeHandler succubusNodeHandler = new SuccubusNodeHandler(defeatNodeHandler);
-        NodeHandler killTheKingNodeHandler = new KillTheKingNodeHandler(defeatNodeHandler);
+        Handler prisonNodeHandler = new NodeHandler(defeatNodeHandler, Node.PRISON);
+        Handler makeAGangNodeHandler = new NodeHandler(defeatNodeHandler, Node.MAKE_A_GANG);
+        Handler succubusNodeHandler = new NodeHandler(defeatNodeHandler, Node.SUCCUBUS);
+        Handler killTheKingNodeHandler = new NodeHandler(defeatNodeHandler, Node.KILL_THE_KING);
 
         prisonNodeHandler.setNext(makeAGangNodeHandler);
         makeAGangNodeHandler.setNext(succubusNodeHandler);

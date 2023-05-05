@@ -2,7 +2,7 @@ package com.epicquestthegame.servlets;
 
 import com.epicquestthegame.model.Game;
 import com.epicquestthegame.model.Node;
-import com.epicquestthegame.model.NodeHandler;
+import com.epicquestthegame.model.Handler;
 
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -17,7 +17,7 @@ public class LogicServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         HttpSession currentSession = req.getSession();
         Game game = (Game) currentSession.getAttribute("game");
-        NodeHandler firstNodeHandler = game.getStartedNode();
+        Handler firstNodeHandler = game.getStartedNode();
         Node nextNode = (Node) currentSession.getAttribute("nextNode");
         firstNodeHandler.handle(nextNode, req);
         resp.sendRedirect("/game.jsp");

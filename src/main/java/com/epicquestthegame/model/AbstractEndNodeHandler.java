@@ -3,7 +3,7 @@ package com.epicquestthegame.model;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-public abstract class AbstractEndNodeHandler implements NodeHandler {
+public abstract class AbstractEndNodeHandler implements Handler {
     protected String resultText;
     @Override
     public Node getThisNode() {
@@ -11,7 +11,7 @@ public abstract class AbstractEndNodeHandler implements NodeHandler {
     }
 
     @Override
-    public void setNext(NodeHandler handler) {
+    public void setNext(Handler handler) {
 
     }
 

@@ -1,19 +1,18 @@
 package com.epicquestthegame.model;
 
 import com.epicquestthegame.model.endNodes.DefeatNodeHandler;
-import com.epicquestthegame.model.nodes.PrisonNodeHandler;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class GameTest {
-    NodeHandler prisonNodeHandler;
+    Handler prisonNodeHandler;
     Game game;
 
     @BeforeEach
     void init() {
-        prisonNodeHandler = new PrisonNodeHandler(new DefeatNodeHandler());
+        prisonNodeHandler = new NodeHandler(new DefeatNodeHandler(), Node.PRISON);
         game = new Game(prisonNodeHandler, "gamer");
     }
 
