@@ -25,19 +25,19 @@ public class NodeHandler implements Handler {
 
     @Override
     public void handle(Node node, HttpServletRequest request) {
-        HttpSession currentSession = request.getSession();
         if (node == thisNode) {
-            handleDecision(request, currentSession);
+            handleDecision(request);
         } else {
             nextNodeHandler.handle(node, request);
         }
     }
 
-    private void handleDecision(HttpServletRequest request, HttpSession currentSession) {
+    private void handleDecision(HttpServletRequest request) {
+        HttpSession currentSession = request.getSession();
         String decisionString = request.getParameter("decision");
         boolean decision = "true".equals(decisionString);
         if (decision) {
-            handleEvent(request, currentSession);
+            handleEvent(request);
         } else {
             currentSession.setAttribute("gameEnd", true);
             int defeatedTimes = (int) currentSession.getAttribute("defeatedTimes");
@@ -45,8 +45,9 @@ public class NodeHandler implements Handler {
             defeatNode.handle(thisNode, request);
         }
     }
-    protected void handleEvent(HttpServletRequest request, HttpSession currentSession) {
+    protected void handleEvent(HttpServletRequest request) {
         Node nextNode = nextNodeHandler.getThisNode();
+        HttpSession currentSession = request.getSession();
         if (nextNode != null) {
             currentSession.setAttribute("nextNode", nextNode);
         } else {
