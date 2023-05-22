@@ -10,4 +10,9 @@ public class DefeatNodeHandler extends AbstractEndNodeHandler {
     public String handleResult(Node node) {
         return DEFEAT_TEXT + node.getDefeatText();
     }
+
+    @Override
+    public Node getNode() {
+        return null;
+    }
 }

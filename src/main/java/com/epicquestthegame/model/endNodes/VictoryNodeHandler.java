@@ -10,4 +10,9 @@ public class VictoryNodeHandler extends AbstractEndNodeHandler {
     public String handleResult(Node node) {
         return VICTORY_TEXT;
     }
+
+    @Override
+    public Node getNode() {
+        return null;
+    }
 }

@@ -1,6 +1,6 @@
 package com.epicquestthegame.model;
 
-import com.epicquestthegame.model.endNodes.DefeatNodeHandler;
+import com.epicquestthegame.utils.Attribute;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -9,7 +9,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.lang.reflect.Field;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -17,8 +16,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class NodeHandlerTest {
     Node thisNode;
     Node nextNode;
-    Handler defeatNode;
-    Handler nodeHandler;
+    NodeHandler nodeHandler;
     Handler nextNodeHandler;
     HttpServletRequest request;
     HttpSession session;
@@ -27,11 +25,9 @@ class NodeHandlerTest {
     void init() {
         thisNode = Mockito.mock(Node.class);
         nextNode = Mockito.mock(Node.class);
-        defeatNode = Mockito.mock(DefeatNodeHandler.class);
         nextNodeHandler = Mockito.mock(NodeHandler.class);
 
-        nodeHandler = new NodeHandler(defeatNode, thisNode);
-        nodeHandler.setNext(nextNodeHandler);
+        nodeHandler = new NodeHandler(thisNode, nextNodeHandler);
 
         request = Mockito.mock(HttpServletRequest.class);
         session = Mockito.mock(HttpSession.class);
@@ -39,26 +35,24 @@ class NodeHandlerTest {
 
     @Test
     void getThisNodeMethod_thisNodeProvided_theSameNodeExpected() {
-        assertEquals(thisNode, nodeHandler.getThisNode());
+        assertEquals(thisNode, nodeHandler.getNode());
     }
 
     @Test
-    void setNextMethod_nextHandlerProvidedAndSet_theSameHandlerExpected() throws NoSuchFieldException,
-            IllegalAccessException {
-        final Field field = nodeHandler.getClass().getDeclaredField("nextNodeHandler");
-        field.setAccessible(true);
-        assertEquals(nextNodeHandler, field.get(nodeHandler));
+    void setNextMethod_nextHandlerProvidedAndSet_theSameHandlerExpected() {
+
+        assertEquals(nextNodeHandler, nodeHandler.getNextNodeHandler());
     }
 
     @Test
     void handleMethod_nodeIsThisNode_decisionIsTrue_nextNodeHandlerProvided_nextNodeAttributeSetExpected() {
         Mockito.when(request.getSession()).thenReturn(session);
-        Mockito.when(request.getParameter("decision")).thenReturn("true");
-        Mockito.when(nextNodeHandler.getThisNode()).thenReturn(nextNode);
+        Mockito.when(request.getParameter(Attribute.DECISION.getValue())).thenReturn("true");
+        Mockito.when(nextNodeHandler.getNode()).thenReturn(nextNode);
 
         nodeHandler.handle(thisNode, request);
 
-        Mockito.verify(session).setAttribute("nextNode", nextNode);
+        Mockito.verify(session).setAttribute(Attribute.NEXT_NODE.getValue(), nextNode);
     }
 
     @Test
@@ -71,27 +65,26 @@ class NodeHandlerTest {
     @Test
     void handleMethod_nodeIsThisNode_decisionIsFalse_defeatActionsExpected() {
         Mockito.when(request.getSession()).thenReturn(session);
-        Mockito.when(request.getParameter("decision")).thenReturn("false");
-        Mockito.when(session.getAttribute("defeatedTimes")).thenReturn(0);
+        Mockito.when(request.getParameter(Attribute.DECISION.getValue())).thenReturn("false");
+        Mockito.when(session.getAttribute(Attribute.DEFEATED_TIMES.getValue())).thenReturn(0);
 
         nodeHandler.handle(thisNode, request);
 
-        Mockito.verify(session).setAttribute("gameEnd", true);
-        Mockito.verify(session).setAttribute("defeatedTimes", 1);
-        Mockito.verify(defeatNode).handle(thisNode, request);
+        Mockito.verify(session).setAttribute(Attribute.GAME_END.getValue(), true);
+        Mockito.verify(session).setAttribute(Attribute.DEFEATED_TIMES.getValue(), 1);
     }
 
     @Test
     void handleMethod_nodeIsThisNode_decisionIsTrue_nextNodeHandlerNullProvided_victoryActionsExpected() {
         Mockito.when(request.getSession()).thenReturn(session);
-        Mockito.when(request.getParameter("decision")).thenReturn("true");
-        Mockito.when(nextNodeHandler.getThisNode()).thenReturn(null);
-        Mockito.when(session.getAttribute("victoryTimes")).thenReturn(0);
+        Mockito.when(request.getParameter(Attribute.DECISION.getValue())).thenReturn("true");
+        Mockito.when(nextNodeHandler.getNode()).thenReturn(null);
+        Mockito.when(session.getAttribute(Attribute.VICTORY_TIMES.getValue())).thenReturn(0);
 
         nodeHandler.handle(thisNode, request);
 
-        Mockito.verify(session).setAttribute("victoryTimes", 1);
-        Mockito.verify(session).setAttribute("gameEnd", true);
+        Mockito.verify(session).setAttribute(Attribute.VICTORY_TIMES.getValue(), 1);
+        Mockito.verify(session).setAttribute(Attribute.GAME_END.getValue(), true);
         Mockito.verify(nextNodeHandler).handle(thisNode, request);
     }
 }

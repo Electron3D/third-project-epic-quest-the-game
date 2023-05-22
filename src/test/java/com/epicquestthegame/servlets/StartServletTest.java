@@ -1,5 +1,6 @@
 package com.epicquestthegame.servlets;
 
+import com.epicquestthegame.utils.Attribute;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -25,17 +26,13 @@ class StartServletTest {
     @Test
     void doGet() {
         Mockito.when(request.getSession()).thenReturn(session);
-        Mockito.when(request.getParameter("gamerName")).thenReturn("gamer");
+        Mockito.when(request.getParameter(Attribute.GAMER_NAME.getValue())).thenReturn("gamer");
 
         StartServlet servlet = new StartServlet();
         try {
             servlet.doGet(request, response);
 
-            /*It's needed to add more verifications
-            Mockito.verify(session).setAttribute("game", game);
-            Mockito.verify(session).setAttribute("currentNode", firstNode);
-            Mockito.verify(session).setAttribute("nextNode", firstNode);*/
-            Mockito.verify(session).setAttribute("gameEnd", false);
+            Mockito.verify(session).setAttribute(Attribute.GAME_END.getValue(), false);
             Mockito.verify(response).sendRedirect("/game.jsp");
         } catch (IOException e) {
             throw new RuntimeException(e);

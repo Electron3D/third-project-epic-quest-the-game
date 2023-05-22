@@ -1,7 +1,8 @@
-package com.epicquestthegame.model;
+package com.epicquestthegame.model.endNodes;
 
-import com.epicquestthegame.model.endNodes.DefeatNodeHandler;
-import com.epicquestthegame.model.endNodes.VictoryNodeHandler;
+import com.epicquestthegame.model.Handler;
+import com.epicquestthegame.model.Node;
+import com.epicquestthegame.utils.Attribute;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -14,10 +15,9 @@ import javax.servlet.http.HttpSession;
 import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(MockitoExtension.class)
-class AbstractEndNodeHandlerTest {
+class DefeatNodeHandlerTest {
     Node thisNode;
     Handler defeatNodeHandler;
-    Handler victoryNodeHandler;
     HttpServletRequest request;
     HttpSession session;
 
@@ -29,9 +29,9 @@ class AbstractEndNodeHandlerTest {
     }
 
     @Test
-    void getThisNodeMethod_nullExpected() {
+    void getNodeMethod_nullExpected() {
         defeatNodeHandler = new DefeatNodeHandler();
-        assertNull(defeatNodeHandler.getThisNode());
+        assertNull(defeatNodeHandler.getNode());
     }
 
     @Test
@@ -43,16 +43,6 @@ class AbstractEndNodeHandlerTest {
 
         defeatNodeHandler.handle(thisNode, request);
 
-        Mockito.verify(session).setAttribute("resultText", "Поражение! " + defeatedText);
-    }
-
-    @Test
-    void handleMethod_victoryInheritorProvided_correctSessionSetAttributeExpected() {
-        victoryNodeHandler = new VictoryNodeHandler();
-        Mockito.when(request.getSession()).thenReturn(session);
-
-        victoryNodeHandler.handle(thisNode, request);
-
-        Mockito.verify(session).setAttribute("resultText", "Победа, ты король мира!");
+        Mockito.verify(session).setAttribute(Attribute.RESULT_TEXT.getValue(), "Поражение! " + defeatedText);
     }
 }

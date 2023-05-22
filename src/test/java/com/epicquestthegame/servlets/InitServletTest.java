@@ -1,5 +1,6 @@
 package com.epicquestthegame.servlets;
 
+import com.epicquestthegame.utils.Attribute;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -51,9 +52,9 @@ class InitServletTest {
             throw new RuntimeException(e);
         }
 
-        Mockito.verify(session).setAttribute("victoryTimes", 0);
-        Mockito.verify(session).setAttribute("defeatedTimes", 0);
-        Mockito.verify(session).setAttribute("ip", "0");
+        Mockito.verify(session).setAttribute(Attribute.VICTORY_TIMES.getValue(), 0);
+        Mockito.verify(session).setAttribute(Attribute.DEFEATED_TIMES.getValue(), 0);
+        Mockito.verify(session).setAttribute(Attribute.IP.getValue(), "0");
         try {
             Mockito.verify(disp).forward(request, response);
         } catch (ServletException | IOException e) {

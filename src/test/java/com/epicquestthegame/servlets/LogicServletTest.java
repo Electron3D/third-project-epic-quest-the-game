@@ -3,6 +3,7 @@ package com.epicquestthegame.servlets;
 import com.epicquestthegame.model.Game;
 import com.epicquestthegame.model.Handler;
 import com.epicquestthegame.model.Node;
+import com.epicquestthegame.utils.Attribute;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -33,9 +34,9 @@ class LogicServletTest {
     @Test
     void doGetMethod_handleMethodInvocationAndRedirectToGameJSPExpected() {
         Mockito.when(request.getSession()).thenReturn(session);
-        Mockito.when(session.getAttribute("game")).thenReturn(game);
+        Mockito.when(session.getAttribute(Attribute.GAME.getValue())).thenReturn(game);
         Mockito.when(game.getStartedNode()).thenReturn(firstNodeHandler);
-        Mockito.when(session.getAttribute("nextNode")).thenReturn(nextNode);
+        Mockito.when(session.getAttribute(Attribute.NEXT_NODE.getValue())).thenReturn(nextNode);
 
         LogicServlet servlet = new LogicServlet();
         try {
