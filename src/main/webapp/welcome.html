@@ -1,0 +1,36 @@
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Epic Quest: The Game</title>
+    <link href="static/styles.css" rel="stylesheet">
+    <script src=https://code.jquery.com/jquery-3.6.0.min.js></script>
+</head>
+<body>
+<div class="centered">
+    <div>
+        <h1>Epic Quest</h1>
+        <h3>The Game</h3>
+    </div>
+    <div>
+        <p>Добро пожаловать в эпический квест! Как зовут тебя, Герой?</p>
+        <input type="text" id="name" maxlength="16" placeholder="Введите ваше имя...">
+    </div>
+    <br>
+    <div>
+        <button onclick="start()">Start adventure</button>
+    </div>
+</div>
+
+<script>
+    function start() {
+        let gamerName = $("#name").val().trim();
+        if (!gamerName) {
+            alert("Ну ладно, шутник, назовись как подобает!");
+        } else {
+            let gamerNameParam = "gamerName=" + gamerName;
+            window.location='/init?' + gamerNameParam;
+        }
+    }
+</script>
+</body>
+</html>
